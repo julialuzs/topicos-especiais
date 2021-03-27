@@ -9,11 +9,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
+import com.example.exercicio1topicos.models.Usuario;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Tela2Activity.class);
 
+                Bundle args = new Bundle();
+                args.putSerializable("usuarios", usuariosCadastrados);
+                intent.putExtra("bundle", args);
+
                 startActivity(intent);
             }
         });
@@ -57,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                 Usuario usuario = getUsuario();
 
                 usuariosCadastrados.add(usuario);
+
+                Toast toast = Toast.makeText(getApplicationContext(), usuario.toString(), Toast.LENGTH_LONG);
+                toast.show();
             }
         });
     }

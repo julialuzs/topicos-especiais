@@ -1,9 +1,12 @@
-package com.example.exercicio1topicos;
+package com.example.exercicio1topicos.models;
 
+import android.text.TextUtils;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-class Usuario {
+public class Usuario implements Serializable {
     private String nome;
     private String email;
     private String telefone;
@@ -57,6 +60,20 @@ class Usuario {
 
     public void setInteresses(ArrayList<String> interesses) {
         this.interesses = interesses;
+    }
+
+    public String getInteressesString() {
+        return TextUtils.join(", ", interesses);
+    }
+
+    @Override
+    public String toString() {
+        return this.getNome() + '\'' +
+                this.getEmail() + '\'' +
+                this.getTelefone() + '\'' +
+                this.getDataNascimento() +
+                this.getGenero() + '\'' +
+                this.getInteressesString();
     }
 
 }
