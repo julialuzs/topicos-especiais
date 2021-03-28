@@ -10,6 +10,9 @@ import com.example.exercicio1topicos.models.Usuario;
 
 import java.util.ArrayList;
 
+import static com.example.exercicio1topicos.Constantes.BUNDLE;
+import static com.example.exercicio1topicos.Constantes.USUARIO_KEY;
+
 public class Tela3Activity extends AppCompatActivity {
 
     @Override
@@ -25,8 +28,8 @@ public class Tela3Activity extends AppCompatActivity {
 
     private Usuario getUsuario() {
         Intent intent = getIntent();
-        Bundle args = intent.getBundleExtra("bundle");
+        Bundle args = intent.getBundleExtra(BUNDLE);
 
-        return (Usuario) args.getSerializable("usuario");
+        return (Usuario) args.getSerializable(USUARIO_KEY);
     }
 }

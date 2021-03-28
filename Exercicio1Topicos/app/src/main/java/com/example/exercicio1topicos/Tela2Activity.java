@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
 
 import java.util.ArrayList;
 
+import static com.example.exercicio1topicos.Constantes.BUNDLE;
+import static com.example.exercicio1topicos.Constantes.USUARIOS_CADASTRADOS_KEY;
+import static com.example.exercicio1topicos.Constantes.USUARIO_KEY;
+
 public class Tela2Activity extends ListActivity {
 
     public ArrayList<Usuario> usuarios;
@@ -52,8 +56,8 @@ public class Tela2Activity extends ListActivity {
                 Intent intent = new Intent(Tela2Activity.this, Tela3Activity.class);
 
                 Bundle args = new Bundle();
-                args.putSerializable("usuario", usuario);
-                intent.putExtra("bundle", args);
+                args.putSerializable(USUARIO_KEY, usuario);
+                intent.putExtra(BUNDLE, args);
 
                 startActivity(intent);
             }
@@ -62,9 +66,9 @@ public class Tela2Activity extends ListActivity {
 
     private ArrayList<Usuario> getUsuariosCadastrados() {
         Intent intent = getIntent();
-        Bundle args = intent.getBundleExtra("bundle");
+        Bundle args = intent.getBundleExtra(BUNDLE);
 
-        return (ArrayList<Usuario>) args.getSerializable("usuarios");
+        return (ArrayList<Usuario>) args.getSerializable(USUARIOS_CADASTRADOS_KEY);
     }
 
 

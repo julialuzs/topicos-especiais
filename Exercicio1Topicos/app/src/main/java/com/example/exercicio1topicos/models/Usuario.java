@@ -68,11 +68,11 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return this.getNome() + '\'' +
-                this.getEmail() + '\'' +
-                this.getTelefone() + '\'' +
+        return this.getNome() + "\'" +
+                this.getEmail() + "\'" +
+                this.getTelefone() + "\'" +
                 this.getDataNascimento() +
-                this.getGenero() + '\'' +
+                this.getGenero() + "\'" +
                 this.getInteressesString();
     }
 
