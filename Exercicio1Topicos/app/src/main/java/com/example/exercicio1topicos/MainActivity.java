@@ -134,16 +134,12 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
 
         usuario.setInteresses(selecionados);
 
-        DateFormat  df = new SimpleDateFormat("dd/MM/yyyy");
+
         Editable date = this.etDataNascimento.getText();
         String dateString = date.toString();
 
-        try {
-            Date data = df.parse(dateString);
-            usuario.setDataNascimento(data);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        usuario.setDataNascimento(dateString);
 
         return usuario;
     }
@@ -187,6 +183,8 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
         Usuario usuario = getUsuario();
 
         usuariosCadastrados.add(usuario);
+
+        this.limparInputs();
 
         Toast toast = Toast.makeText(getApplicationContext(), usuario.toString(), Toast.LENGTH_LONG);
         toast.show();
@@ -233,5 +231,15 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
         SimpleMaskFormatter telefoneFormatter = new SimpleMaskFormatter("(NN)NNNNN-NNNN");
         MaskTextWatcher mtt = new MaskTextWatcher(this.etTelefone, telefoneFormatter);
         this.etTelefone.addTextChangedListener(mtt);
+    }
+
+    private void limparInputs() {
+       this.etTelefone.setText("");
+       this.etDataNascimento.setText("");
+       this.etEmail.setText("");
+       this.etNome.setText("");
+       this.rgGenero.clearCheck();
+       this.cbMusica.setChecked(false);
+       this.cbFilme.setChecked(false);
     }
 }

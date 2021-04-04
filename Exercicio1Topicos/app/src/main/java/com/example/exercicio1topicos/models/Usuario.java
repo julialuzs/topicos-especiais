@@ -4,9 +4,12 @@ import android.text.TextUtils;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static com.example.exercicio1topicos.Constantes.PADRAO_DATA_DE_NASCIMENTO;
 
 public class Usuario implements Serializable {
     private String nome;
@@ -45,12 +48,24 @@ public class Usuario implements Serializable {
     }
 
     public String getDataNascimentoString() {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat df = new SimpleDateFormat(PADRAO_DATA_DE_NASCIMENTO);
         return df.format(dataNascimento);
     }
 
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public void setDataNascimento(String dataNascimentoString) {
+        DateFormat df = new SimpleDateFormat(PADRAO_DATA_DE_NASCIMENTO);
+
+        try {
+            Date data = df.parse(dataNascimentoString);
+            this.dataNascimento = data;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getGenero() {
