@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
     @Email(message = EMAIL_INVALIDO)
     private TextInputEditText etEmail;
 
-    @Checked(message = CAMPO_OBRIGATORIO)
     private RadioGroup rgGenero;
 
     private CheckBox cbMusica;
@@ -131,13 +130,10 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
                 selecionados.add(interesse.getText().toString());
             }
         }
-
         usuario.setInteresses(selecionados);
-
 
         Editable date = this.etDataNascimento.getText();
         String dateString = date.toString();
-
 
         usuario.setDataNascimento(dateString);
 
@@ -185,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
         usuariosCadastrados.add(usuario);
 
         this.limparInputs();
+        this.limparValidacoes();
 
         Toast toast = Toast.makeText(getApplicationContext(), usuario.toString(), Toast.LENGTH_LONG);
         toast.show();
@@ -192,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
+        this.limparValidacoes();
+
         for (ValidationError error : errors) {
 
             View view = error.getView();
@@ -218,6 +217,8 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
         }
     }
 
+
+
     private void setarMascaras() {
         MaskFormatter dateFormatter = new MaskFormatter("[0-3][0-9]/[0-1][0-9]/[0-9][0-9][0-9][0-9]");
 
@@ -241,5 +242,12 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
        this.rgGenero.clearCheck();
        this.cbMusica.setChecked(false);
        this.cbFilme.setChecked(false);
+    }
+
+    private void limparValidacoes() {
+        this.txtNome.setError(null);
+        this.txtDataNascimento.setError(null);
+        this.txtEmail.setError(null);
+        this.txtTelefone.setError(null);
     }
 }
