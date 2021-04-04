@@ -4,15 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.exercicio1topicos.models.Usuario;
+import com.github.rtoshiro.util.format.MaskFormatter;
+import com.github.rtoshiro.util.format.SimpleMaskFormatter;
+import com.github.rtoshiro.util.format.pattern.MaskPattern;
+import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Checked;
@@ -21,6 +28,9 @@ import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,22 +47,27 @@ import static com.example.exercicio1topicos.Constantes.USUARIOS_CADASTRADOS_KEY;
 
 public class MainActivity extends AppCompatActivity implements Validator.ValidationListener {
 
-    @NotEmpty(message = CAMPO_OBRIGATORIO)
-    @Length(min = 3, max = 20, message = TAMANHO_NOME)
-    private TextInputEditText idNome;
+    private TextInputLayout txtNome;
+    private TextInputLayout txtEmail;
+    private TextInputLayout txtTelefone;
+    private TextInputLayout txtDataNascimento;
 
     @NotEmpty(message = CAMPO_OBRIGATORIO)
-    @Length(min = 13, max = 13, message = TAMANHO_TELEFONE)
-    private TextInputEditText idTelefone;
+    @Length(min = 3, max = 20, message = TAMANHO_NOME)
+    private TextInputEditText etNome;
+
+    @NotEmpty(message = CAMPO_OBRIGATORIO)
+    @Length(min = 14, max = 14, message = TAMANHO_TELEFONE)
+    private TextInputEditText etTelefone;
 
     @NotEmpty(message = CAMPO_OBRIGATORIO)
     @Pattern(regex = DATA_DE_NASCIMENTO_REGEX, message = DATA_DE_NASCIMENTO_INVALIDA)
     @Length(min = 10, max = 10, message = TAMANHO_DATA_DE_NASCIMENTO)
-    private TextInputEditText idDataNascimento;
+    private TextInputEditText etDataNascimento;
 
     @NotEmpty(message = CAMPO_OBRIGATORIO)
     @Email(message = EMAIL_INVALIDO)
-    private TextInputEditText idEmail;
+    private TextInputEditText etEmail;
 
     @Checked(message = CAMPO_OBRIGATORIO)
     private RadioGroup rgGenero;
@@ -74,9 +89,6 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
         setContentView(R.layout.activity_main);
 
         inicializarComponentes();
-
-        validator = new Validator(this);
-        validator.setValidationListener(this);
 
         this.btEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,9 +115,9 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
     public Usuario getUsuario() {
         Usuario usuario = new Usuario();
 
-        usuario.setEmail(this.idEmail.getText().toString());
-        usuario.setNome(this.idNome.getText().toString());
-        usuario.setTelefone(this.idTelefone.getText().toString());
+        usuario.setEmail(this.etEmail.getText().toString());
+        usuario.setNome(this.etNome.getText().toString());
+        usuario.setTelefone(this.etTelefone.getText().toString());
 
         int selectedRadioButton = this.rgGenero.getCheckedRadioButtonId();
         RadioButton rbGenero = findViewById(selectedRadioButton);
@@ -121,9 +133,17 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
         }
 
         usuario.setInteresses(selecionados);
-        Date data = new Date();
-//        data.
-//        usuario.setDataNascimento(this.idDataNascimento.getText().toString());
+
+        DateFormat  df = new SimpleDateFormat("dd/MM/yyyy");
+        Editable date = this.etDataNascimento.getText();
+        String dateString = date.toString();
+
+        try {
+            Date data = df.parse(dateString);
+            usuario.setDataNascimento(data);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return usuario;
     }
@@ -132,15 +152,19 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
         return usuariosCadastrados;
     }
 
-
     private void inicializarComponentes() {
         this.btCadastrar = this.findViewById(R.id.btCadastrar);
         this.btEnviar = this.findViewById(R.id.btEnviar);
 
-        this.idNome = this.findViewById(R.id.idNome);
-        this.idTelefone = this.findViewById(R.id.idTelefone);
-        this.idDataNascimento = this.findViewById(R.id.idDataNascimento);
-        this.idEmail = this.findViewById(R.id.idEmail);
+        this.txtNome = this.findViewById(R.id.txtNome);
+        this.txtEmail = this.findViewById(R.id.txtEmail);
+        this.txtTelefone = this.findViewById(R.id.txtTelefone);
+        this.txtDataNascimento = this.findViewById(R.id.txtDataNascimento);
+
+        this.etNome = this.findViewById(R.id.idNome);
+        this.etTelefone = this.findViewById(R.id.idTelefone);
+        this.etDataNascimento = this.findViewById(R.id.idDataNascimento);
+        this.etEmail = this.findViewById(R.id.idEmail);
 
         this.rgGenero = this.findViewById(R.id.rgGenero);
         this.cbMusica = this.findViewById(R.id.cbMusica);
@@ -151,6 +175,11 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
         this.checkBoxes = new ArrayList<CheckBox>();
         this.checkBoxes.add(cbFilme);
         this.checkBoxes.add(cbMusica);
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+
+        this.setarMascaras();
     }
 
     @Override
@@ -166,10 +195,43 @@ public class MainActivity extends AppCompatActivity implements Validator.Validat
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {
-            View view = error.getView();
-            String erro = error.getCollatedErrorMessage(this);
 
-            Toast.makeText(this, erro, Toast.LENGTH_LONG).show();
+            View view = error.getView();
+            String mensagemErro = error.getCollatedErrorMessage(this);
+
+            if (view instanceof TextInputEditText) {
+
+                switch (view.getId()) {
+                    case R.id.idNome:
+                        this.txtNome.setError(mensagemErro);
+                        break;
+                    case R.id.idEmail:
+                        this.txtEmail.setError(mensagemErro);
+                        break;
+                    case R.id.idTelefone:
+                        this.txtTelefone.setError(mensagemErro);
+                        break;
+                    case R.id.idDataNascimento:
+                        this.txtDataNascimento.setError(mensagemErro);
+                        break;
+                }
+            }
+
         }
+    }
+
+    private void setarMascaras() {
+        MaskFormatter dateFormatter = new MaskFormatter("[0-3][0-9]/[0-1][0-9]/[0-9][0-9][0-9][0-9]");
+
+        dateFormatter.registerPattern(new MaskPattern("[0-3]"));
+        dateFormatter.registerPattern(new MaskPattern("[0-9]"));
+        dateFormatter.registerPattern(new MaskPattern("[0-1]"));
+
+        MaskTextWatcher mtd = new MaskTextWatcher(this.etDataNascimento, dateFormatter);
+        this.etDataNascimento.addTextChangedListener(mtd);
+
+        SimpleMaskFormatter telefoneFormatter = new SimpleMaskFormatter("(NN)NNNNN-NNNN");
+        MaskTextWatcher mtt = new MaskTextWatcher(this.etTelefone, telefoneFormatter);
+        this.etTelefone.addTextChangedListener(mtt);
     }
 }

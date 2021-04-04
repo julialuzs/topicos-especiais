@@ -12,7 +12,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilNome"
+        android:id="@+id/txtNome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:boxBackgroundColor="#00FFFFFF"
@@ -26,6 +26,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtEmail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:boxBackgroundColor="#00FFFFFF">
@@ -38,6 +39,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtTelefone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:boxBackgroundColor="#00FFFFFF">
@@ -50,6 +52,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtDataNascimento"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="20px"

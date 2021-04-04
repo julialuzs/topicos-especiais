@@ -3,6 +3,8 @@ package com.example.exercicio1topicos.models;
 import android.text.TextUtils;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -42,6 +44,11 @@ public class Usuario implements Serializable {
         return dataNascimento;
     }
 
+    public String getDataNascimentoString() {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return df.format(dataNascimento);
+    }
+
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
@@ -68,11 +75,11 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return this.getNome() + "\'" +
-                this.getEmail() + "\'" +
-                this.getTelefone() + "\'" +
-                this.getDataNascimento() +
-                this.getGenero() + "\'" +
+        return this.getNome() + "\n" +
+                this.getEmail() + "\n" +
+                this.getTelefone() + "\n" +
+                this.getDataNascimentoString() + "\n" +
+                this.getGenero() + "\n" +
                 this.getInteressesString();
     }
 
