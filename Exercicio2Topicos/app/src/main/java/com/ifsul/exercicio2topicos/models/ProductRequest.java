@@ -1,26 +1,15 @@
 package com.ifsul.exercicio2topicos.models;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public class Product implements Serializable {
+public class ProductRequest implements Serializable {
 
-    private int id;
     private String name;
     private String description;
     private String imageUrl;
-    private String creationTimestamp;
     private boolean enabled;
-    private int stockLevel;
+    private Integer stockLevel;
     private float price;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -46,14 +35,6 @@ public class Product implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public String getCreationTimestamp() {
-        return creationTimestamp;
-    }
-
-    public void setCreationTimestamp(String creationTimestamp) {
-        this.creationTimestamp = creationTimestamp;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
@@ -62,11 +43,11 @@ public class Product implements Serializable {
         this.enabled = enabled;
     }
 
-    public int getStockLevel() {
+    public Integer getStockLevel() {
         return stockLevel;
     }
 
-    public void setStockLevel(int stockLevel) {
+    public void setStockLevel(Integer stockLevel) {
         this.stockLevel = stockLevel;
     }
 
@@ -77,7 +58,4 @@ public class Product implements Serializable {
     public void setPrice(float price) {
         this.price = price;
     }
-
-
-
 }
