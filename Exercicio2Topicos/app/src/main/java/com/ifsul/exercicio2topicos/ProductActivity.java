@@ -22,6 +22,7 @@ import static com.ifsul.exercicio2topicos.Constants.EDIT_PRODUCT_BUNDLE;
 public class ProductActivity extends AppCompatActivity {
 
     private Button btSave;
+    private Button btDelete;
     private EditText etName;
     private EditText etDescription;
     private EditText etImageURL;
@@ -45,6 +46,9 @@ public class ProductActivity extends AppCompatActivity {
         if (args != null) {
             this.product = (Product) args.getSerializable(EDIT_PRODUCT);
             this.setProduct(this.product);
+            this.btDelete.setVisibility(View.VISIBLE);
+        } else {
+            this.btDelete.setVisibility(View.INVISIBLE);
         }
 
         this.setOnClickListener();
@@ -54,7 +58,12 @@ public class ProductActivity extends AppCompatActivity {
         this.btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int productId = product.getId();
+                int productId = 0;
+
+                if (product != null) {
+                    productId = product.getId();
+                }
+
                 ProductRequest request = getProduct();
 
                 Call<Product> callProduct = productId > 0 ?
@@ -65,7 +74,7 @@ public class ProductActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Product> call, Response<Product> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(ProductActivity.this, "Item saved successfully", Toast.LENGTH_LONG);
+                            Toast.makeText(getApplicationContext(), "Item salvo com sucesso", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(ProductActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -73,7 +82,30 @@ public class ProductActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Product> call, Throwable t) {
-                        Toast.makeText(ProductActivity.this, "An error occurred", Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(), "Ocorreu um erro. Não foi possível salvar o item", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+
+        this.btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int productId = product.getId();
+                Call<Void> call = productService.delete(productId);
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Item deletado com sucesso", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(ProductActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "An error occurred", Toast.LENGTH_LONG);
                     }
                 });
             }
@@ -82,6 +114,7 @@ public class ProductActivity extends AppCompatActivity {
 
     private void initializeComponents() {
         this.btSave = findViewById(R.id.btSave);
+        this.btDelete = findViewById(R.id.btDelete);
         this.etName = findViewById(R.id.etName);
         this.etDescription = findViewById(R.id.etDescription);
         this.etImageURL = findViewById(R.id.etURL);

@@ -62,13 +62,13 @@ public class MainActivity extends ListActivity {
                     });
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Could not get data. " + response.errorBody().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Não foi possível pegar os dados. " + response.errorBody().toString(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Could not get data. Try again later", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Não foi possível pegar os dados. Tente novamente mais tarde", Toast.LENGTH_LONG).show();
             }
         });
 

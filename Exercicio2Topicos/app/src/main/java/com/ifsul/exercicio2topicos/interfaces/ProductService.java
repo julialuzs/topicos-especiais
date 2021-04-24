@@ -26,5 +26,5 @@ public interface ProductService {
     Call<Product> update(@Path("id") int id, @Body ProductRequest product);
 
     @DELETE("product/{id}")
-    void delete(@Path("id") int id);
+    Call<Void> delete(@Path("id") int id);
 }
